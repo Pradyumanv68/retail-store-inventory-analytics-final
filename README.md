@@ -1,95 +1,216 @@
-# 📦 Retail Store Sales & Inventory Performance Analytics
+# 📦 Retail Intelligence Command Center
 
-> An intelligent retail decision-support system that turns historical sales and inventory data into **demand forecasts, inventory-risk alerts and replenishment recommendations**.
+> **Retail Store Sales & Inventory Performance Analytics** — an AI-powered decision-intelligence capstone that connects sales analytics, demand forecasting, inventory risk, anomaly detection, scenario simulation and replenishment actions.
 
-**Author:** Pradyuman Verma · Capstone Project · Data Science / Business Analytics
+**Author:** Pradyuman Verma · B.Tech CSE (Data Science), SRMIST · Capstone 2026
 
-## Business problem
-Retailers lose money in two opposite ways: **stockouts** (lost sales) and **overstock** (locked-up cash). This project answers, for every store-product pair:
-*How is it selling? How many days of stock are left? What will demand be next week? How much should we order, or should we discount instead?*
+## 🚀 What the system does
 
-## What's inside
-| Stage | What it does | Code |
-|---|---|---|
-| 1. Cleaning | column standardisation, dates, duplicates, imputation (per store-product), IQR outlier flag | `src/data_cleaning.py` |
-| 2. Feature engineering | year/month/week/day/day-of-week, revenue, discount %, stock-coverage days, stockout flag, lag & rolling demand features | `src/data_cleaning.py`, `src/forecasting.py` |
-| 3. Sales analytics | revenue/units by store, category, product, month, season, weekday; promotion & discount impact | `src/analytics.py` |
-| 4. Inventory risk engine | days of cover vs lead time -> **Critical / High Risk / Medium / Healthy / Overstock** + risk score, lost-sales analysis | `src/analytics.py` |
-| 5. Movers | **Fast / Medium / Slow / Dead-stock** classification by sales velocity, plus annualised inventory turnover | `src/analytics.py` |
-| 6. Forecasting | Baseline vs Linear Regression vs Random Forest vs Gradient Boosting, compared on MAE / RMSE / MAPE / R² with a **time-based split** (no future leakage) | `src/forecasting.py` |
-| 7. 7-day demand forecast | recursive multi-step forecast per store-product | `src/forecasting.py` |
-| 8. Recommendation engine | `order = forecast_7d + safety_stock − current_inventory`, safety stock = z·σ·√lead-time; auto-generated action text | `src/recommendations.py` |
-| 9. Dashboard | 4-page Streamlit app + order calculator + CSV export | `dashboard/app.py` |
+**OBSERVE → DIAGNOSE → PREDICT → SIMULATE → DECIDE → ACT**
 
-## Key findings (real dataset, 76,000 records)
-- **17.5% of demand goes unmet** (about $83.7M of lost revenue): stock on hand averages only ~3 days of demand, so stockouts are the biggest problem, not overstock.
-- **11.4%** of store-product-days end in a stockout, yet a few items sit on 8+ days of cover, so stock is misallocated as well as short.
-- Of 100 store-product pairs, **28 are Critical and 33 High Risk** today; 6 are overstocked. The action queue ranks them by urgency with an order quantity for each.
-- Forecasting **true demand** (not sales, which are capped by stock) is the right target, because sales understate what customers wanted.
+| Layer | Capability |
+|---|---|
+| Executive Analytics | Revenue, demand, sales, inventory, stock cover and demand-gap KPIs |
+| Sales Intelligence | Store, category, product and promotion performance |
+| Forecasting | Chronological ML validation with MAE, RMSE, MAPE and R² |
+| Model Benchmarking | Moving-average baseline vs Linear Regression vs Random Forest vs Gradient Boosting |
+| Inventory Risk | Critical / High Risk / Medium / Healthy / Overstock |
+| AI Risk Radar | 0–100 SKU/store risk score using coverage, demand gap and price pressure |
+| Anomaly Detection | Isolation Forest for unusual demand/revenue/inventory patterns |
+| SKU Segmentation | K-Means portfolio segmentation |
+| Predictive Drivers | Random Forest feature contribution for demand |
+| Scenario Lab | Promotion, discount and price what-if simulation |
+| Replenishment | Safety stock + forecast-driven recommended order |
+| Action Center | Prioritized operational actions with CSV export |
+| AI Copilot | Concise executive decision brief from current model outputs |
 
-## Model results (last 90 days held out, target = daily demand)
-| Model | MAE | RMSE | MAPE % | R² |
-|---|---|---|---|---|
-| Baseline (7-day moving avg) | 32.12 | 41.22 | 45.9 | 0.134 |
-| Linear Regression | 25.94 | 33.44 | 37.3 | 0.430 |
-| Random Forest | 21.75 | 29.21 | 31.5 | 0.565 |
-| **Gradient Boosting** | **14.22** | **19.61** | **21.7** | **0.804** |
+## 🧠 Why it is different
 
-Gradient Boosting cuts RMSE by about 52% versus the naive moving-average baseline.
+A conventional dashboard tells a manager **what happened**.
 
-Example generated recommendations:
-> `CRITICAL: P0009 @ S001 - Demand is rising 4%. Inventory (128) does not cover the 7-day forecast (1036). Order ~1042 units.`
-> `OVERSTOCK: P0014 @ S002 holds 8 days of cover. Pause replenishment and run a promotional discount / inter-store transfer to release cash.`
+This project is designed to answer:
 
-## Visuals
-![Monthly revenue](visualizations/monthly_revenue.png)
-![Days of cover heatmap](visualizations/days_of_cover_heatmap.png)
-![Risk distribution](visualizations/risk_distribution.png)
-![Model comparison](visualizations/model_comparison.png)
-![Actual vs predicted](visualizations/actual_vs_predicted.png)
+- What is happening?
+- Why should I care?
+- Which SKU/store needs attention?
+- What could happen next?
+- What if I change price or promotion?
+- How much should I order?
+- Which action should happen first?
 
-## Run it
+The result is a **decision-support prototype**, not only a visualization dashboard.
+
+## 🏗️ Architecture
+
+```
+Retail Dataset
+      ↓
+Cleaning + Feature Engineering
+      ↓
+Sales / Demand Analytics
+      ↓
+ML Model Benchmarking
+      ↓
+Demand Forecast
+      ↓
+Inventory + AI Risk Engine
+      ↓
+Anomaly Detection + SKU Segmentation
+      ↓
+Scenario Lab + Executive Copilot
+      ↓
+Replenishment Recommendations
+      ↓
+Action Center
+```
+
+## 📁 Repository structure
+
+```
+├── app/
+│   ├── app.py                  # Main AI Streamlit Command Center
+│   ├── analytics.py            # Dashboard analytics
+│   ├── forecasting.py          # Dashboard demand forecasting
+│   ├── recommendations.py      # Inventory recommendations
+│   └── ai_engine.py            # Risk, anomaly, segmentation & scenario AI
+├── dashboard/
+│   └── app.py                  # Streamlit compatibility entry point
+├── src/
+│   ├── data_cleaning.py
+│   ├── analytics.py
+│   ├── forecasting.py
+│   ├── recommendations.py
+│   └── generate_demo_data.py
+├── tests/
+│   └── test_pipeline.py
+├── reports/
+├── visualizations/
+├── data/
+├── run_pipeline.py
+├── requirements.txt
+└── README.md
+```
+
+The original complete project archive is also retained in the repository as a reference package.
+
+## 📊 Forecasting methodology
+
+The forecasting pipeline uses a **time-based holdout**, keeping future observations out of training.
+
+Models include:
+
+- 7-day moving-average baseline
+- Linear Regression
+- Random Forest
+- Gradient Boosting
+
+Evaluation:
+
+- MAE
+- RMSE
+- MAPE
+- R²
+
+The forecasting target is **true Demand when available**, rather than treating realized sales as demand. This matters because stockouts can cap sales below what customers actually wanted.
+
+## 📦 Inventory intelligence
+
+For each store-product combination, the system calculates:
+
+- current inventory
+- average demand
+- demand variability
+- days of cover
+- stockout exposure
+- risk level
+- safety stock
+- forecast demand
+- recommended order quantity
+- operational action
+
+The recommendation logic is explicitly presented as a planning aid rather than a guaranteed business outcome.
+
+## 🤖 AI layer
+
+### AI Risk Radar
+Produces a 0–100 risk score from:
+
+- inventory coverage
+- demand gap
+- competitive price pressure
+
+### Anomaly Detection
+Isolation Forest identifies unusual combinations of:
+
+- revenue
+- demand
+- units sold
+- inventory
+- price
+
+### Portfolio Segmentation
+K-Means groups SKU/store combinations into operational segments such as:
+
+- Value Builder
+- Growth Driver
+- Stable Core
+- Slow Mover
+
+### Predictive Feature Contribution
+Random Forest estimates the relative predictive contribution of available demand drivers.
+
+### Scenario Lab
+Allows interactive what-if planning around:
+
+- discount changes
+- promotions
+- price changes
+
+Scenario outputs are simulations based on observed relationships, not causal guarantees.
+
+## ▶️ Run locally
+
 ```bash
-git clone https://github.com/Pradyumanv68/Retail-Store-Sales-Inventory-Performance-Analytics.git
-cd Retail-Store-Sales-Inventory-Performance-Analytics
 pip install -r requirements.txt
-python run_pipeline.py            # clean -> analyse -> train -> forecast -> recommend -> figures
-streamlit run dashboard/app.py    # interactive dashboard
-pytest tests                      # unit tests
+streamlit run app/app.py
 ```
 
-## Dataset
-`data/sales_data.csv`: retail store inventory and demand data (76,000 rows; 5 stores × 20 products × 760 days, 2022-01-01 to 2024-01-30) with Store ID, Product ID, Category, Region, Inventory Level, Units Sold, Units Ordered, Price, Discount, Weather Condition, Promotion, Competitor Pricing, Seasonality, Epidemic and **Demand**. No missing values or duplicates were found.
-The pipeline also accepts the other common Kaggle version of this dataset (with `Holiday/Promotion` and `Demand Forecast` columns): drop the file into `data/` and re-run `python run_pipeline.py`. If no file is present, a synthetic demo file with the same schema is generated.
+Alternative Streamlit entry point:
 
-## Project structure
-```
-├── data/                 sales_data.csv + processed/clean.csv.gz
-├── notebooks/            Retail_Analytics_Walkthrough.ipynb (executed)
-├── src/                  data_cleaning, analytics, forecasting, recommendations, generate_demo_data
-├── dashboard/app.py      Streamlit app
-├── reports/              model_metrics, forecast_next_7_days, inventory_actions (CSV)
-├── visualizations/       exported charts
-├── tests/                pytest suite
-├── run_pipeline.py       one-command pipeline
-└── requirements.txt
+```bash
+streamlit run dashboard/app.py
 ```
 
-## Methodology notes
-- **Days of cover** = current inventory ÷ 30-day average daily demand. Risk is set relative to the replenishment lead time L (default 3 days): <0.5L Critical, <L High Risk, <2L Medium, up to 2.5L Healthy, above that Overstock.
-- **Forecast target is true demand**; unmet demand = demand − units sold, which gives lost sales and lost revenue.
-- **Time-based validation** avoids the leakage a random split would cause in time-series data.
-- **Outliers are flagged, not removed**, since demand spikes are genuine business events.
-- Limitations: forecasts assume no future promotion; lead time and service level are configurable assumptions; no supplier constraints or holding costs.
+Run the analytical pipeline:
 
-## Future work
-Prophet/ARIMA per-series models, hyper-parameter tuning, cost-based (EOQ) ordering, anomaly detection, Power BI companion dashboard.
+```bash
+python run_pipeline.py
+```
 
-## License
+Run tests:
+
+```bash
+pytest tests
+```
+
+## 🌐 Deployment
+
+For Streamlit Community Cloud, use:
+
+- Repository: `Pradyumanv68/retail-store-inventory-analytics-final`
+- Branch: `main`
+- Main file: `app/app.py`
+
+The dashboard can use the packaged retail dataset when available and has a public-data fallback plus demo-data fallback so the application remains deployable.
+
+## ⚠️ Analytical limitations
+
+- Lead time and safety-stock service level are configurable assumptions.
+- Scenario simulation is not causal inference.
+- Feature importance represents predictive contribution, not causation.
+- Supplier constraints, procurement cost and full EOQ economics are outside the current scope.
+- Future promotions are not known by the forecasting model unless explicitly supplied.
+
+## 📜 License
+
 MIT
-
-## Deploy the dashboard (Streamlit Community Cloud)
-1. Push this repo to GitHub (public).
-2. Go to https://share.streamlit.io → **Create app** → pick the repo, branch `main`, main file `dashboard/app.py`.
-3. Deploy. The app reads the committed `data/processed/clean.csv.gz` and `reports/*.csv`, so no extra setup is needed.
-Add your live link here: `https://<your-app-name>.streamlit.app`
