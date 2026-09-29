@@ -1,5 +1,5 @@
 #!/bin/sh
-REPO_URL="${REPO_URL:-https://github.com/Pradyumanv68/Retail-Store-Sales-Inventory-Performance-Analytics.git}"
+REPO_URL="${REPO_URL:-https://github.com/Pradyumanv68/retail-store-inventory-analytics-final.git}"
 cd "$(dirname "$0")" || exit 1
 command -v git >/dev/null || { echo "Install git first"; exit 1; }
 [ -d .git ] || git init
