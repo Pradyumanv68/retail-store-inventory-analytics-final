@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+models/
+.DS_Store
+push_to_github.bat
+push_to_github.sh
