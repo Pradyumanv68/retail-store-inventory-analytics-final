@@ -14,9 +14,9 @@ st.set_page_config(page_title="Retail Intelligence Command Center", page_icon="�
 st.markdown("""
 <style>
 #MainMenu, footer, header {visibility:hidden;}
-.block-container{padding:1rem 2.1rem 2.5rem;max-width:1550px}
-[data-testid="stSidebar"]{background:#0b0d13;border-right:1px solid #242733}
-[data-testid="stSidebar"] *{font-family:Inter,system-ui,sans-serif}
+.block-container{padding:1.15rem 1.8rem 2.5rem;max-width:1500px;margin:0 auto}
+[data-testid="stSidebar"]{background:#0b0d13;border-right:1px solid #242733;min-width:290px;width:290px} [data-testid="stSidebarContent"]{padding:1rem 1rem 2rem} [data-testid="stAppViewContainer"]{overflow-x:hidden}
+[data-testid="stSidebar"] *{font-family:Inter,system-ui,sans-serif;box-sizing:border-box} [data-testid="stFileUploader"]{width:100%} [data-testid="stFileUploader"] section{padding:0;border:0;background:transparent} [data-testid="stFileUploader"] button{width:100%;min-height:42px;border-radius:9px}
 body{background:#0b0d13}
 .hero{padding:.35rem 0 .9rem}
 .hero h1{font-size:2.45rem;line-height:1.05;margin:.15rem 0 .25rem;color:#f7f8fb;font-weight:800}
@@ -103,8 +103,8 @@ with st.sidebar:
     st.markdown("### 🎛️ Filters")
     st.caption("Filter the command center by store and category.")
     stores=sorted(df["Store ID"].astype(str).unique()); cats=sorted(df["Category"].astype(str).unique())
-    ss=st.multiselect("Store coverage",stores,stores)
-    cc=st.multiselect("Product categories",cats,cats)
+    ss=st.multiselect("Store coverage",stores,stores,placeholder="Select stores")
+    cc=st.multiselect("Product categories",cats,cats,placeholder="Select categories")
     horizon=st.slider("Forecast / planning horizon",3,30,7)
     st.divider()
     st.markdown("### 🤖 Decision layer")
