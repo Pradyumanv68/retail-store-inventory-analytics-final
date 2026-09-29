@@ -9,33 +9,33 @@ from forecasting import chronological_model, forecast_next_days
 from recommendations import inventory_status, generate_alerts, narrative
 from ai_engine import ai_risk_scores, detect_anomalies, sku_segments, feature_importance, scenario_demand, copilot_summary
 
-st.set_page_config(page_title="Retail Intelligence Command Center", page_icon="📦", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Retail Pulse AI", page_icon="📈", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
 <style>
 #MainMenu, footer, header {visibility:hidden;}
-.block-container{padding:1.15rem 1.8rem 2.5rem;max-width:1500px;margin:0 auto}
-[data-testid="stSidebar"]{background:#0b0d13;border-right:1px solid #242733;min-width:290px;width:290px} [data-testid="stSidebarContent"]{padding:1rem 1rem 2rem} [data-testid="stAppViewContainer"]{overflow-x:hidden}
-[data-testid="stSidebar"] *{font-family:Inter,system-ui,sans-serif;box-sizing:border-box} [data-testid="stFileUploader"]{width:100%} [data-testid="stFileUploader"] section{padding:0;border:0;background:transparent} [data-testid="stFileUploader"] button{width:100%;min-height:42px;border-radius:9px}
-body{background:#0b0d13}
-.hero{padding:.35rem 0 .9rem}
-.hero h1{font-size:2.45rem;line-height:1.05;margin:.15rem 0 .25rem;color:#f7f8fb;font-weight:800}
-.hero p{margin:0;color:#9ca3af;font-size:.93rem}
-.eyebrow{color:#ff4b4b;text-transform:uppercase;letter-spacing:1.7px;font-size:.68rem;font-weight:800}
-.kpi-card{background:#11141b;border:1px solid #252936;border-radius:13px;padding:15px 17px;min-height:112px}
-.kpi-label{color:#a6adba;font-size:.78rem;font-weight:600}
-.kpi-value{color:#f8fafc;font-size:1.7rem;font-weight:800;margin:.25rem 0}
-.kpi-sub{color:#737b89;font-size:.72rem}
-.section-title{font-size:1.02rem;font-weight:800;color:#f3f4f6;margin:.45rem 0 .65rem}
-.panel{background:#11141b;border:1px solid #252936;border-radius:14px;padding:14px}
-.insight{padding:12px 14px;border-radius:11px;background:#151821;border:1px solid #282d39;margin-bottom:8px}
-.insight b{color:#f5f6f8}.muted{color:#8f98a7;font-size:.82rem}
-.small-note{color:#737b89;font-size:.72rem}
-.stTabs [data-baseweb="tab-list"]{gap:2px;border-bottom:1px solid #252936}
-.stTabs [data-baseweb="tab"]{padding:9px 14px;font-weight:700}
-.stTabs [aria-selected="true"]{color:#ff5a5a}
-[data-testid="stMetric"]{background:#11141b;border:1px solid #252936;border-radius:13px;padding:11px 14px}
-</style>
+.block-container{padding:1.4rem 2rem 3rem;max-width:1480px;margin:0 auto}
+[data-testid="stSidebar"]{background:linear-gradient(180deg,#07111f 0%,#0a1626 100%);border-right:1px solid #1d334b}
+[data-testid="stSidebar"] *{font-family:Inter,system-ui,sans-serif;box-sizing:border-box}
+[data-testid="stSidebarContent"]{padding:1.2rem 1rem 2rem}
+body{background:#06101d}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:1.1rem}
+.brand-mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#22d3ee,#2563eb);display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 8px 25px rgba(34,211,238,.18)}
+.brand-title{font-weight:850;font-size:1.05rem;color:#f8fafc;line-height:1.05}.brand-sub{font-size:.67rem;color:#71849a;margin-top:3px}
+.hero{position:relative;overflow:hidden;padding:1.7rem 1.9rem;border:1px solid #1b3853;border-radius:20px;background:linear-gradient(125deg,#0a192a,#0b2238 58%,#0b3141);box-shadow:0 18px 55px rgba(0,0,0,.2);margin-bottom:1.1rem}
+.hero:after{content:"";position:absolute;right:-70px;top:-90px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#22d3ee44,transparent 65%)}
+.eyebrow{color:#67e8f9;text-transform:uppercase;letter-spacing:2px;font-size:.66rem;font-weight:850}
+.hero h1{font-size:2.55rem;line-height:1.02;margin:.35rem 0 .55rem;color:#f8fafc;font-weight:850}
+.hero p{margin:0;color:#a9bdd0;font-size:.93rem;max-width:760px}
+.hero-chip{display:inline-block;margin-top:1rem;padding:.38rem .7rem;border-radius:999px;background:#0b2a3c;border:1px solid #18506b;color:#8be8f5;font-size:.68rem;font-weight:800}
+.kpi-card{background:linear-gradient(145deg,#0e1b2b,#0b1522);border:1px solid #1d344b;border-radius:15px;padding:15px 16px;min-height:112px;box-shadow:0 8px 25px rgba(0,0,0,.14)}
+.kpi-label{color:#8196aa;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px}.kpi-value{color:#f8fafc;font-size:1.65rem;font-weight:850;margin:.3rem 0}.kpi-sub{color:#61778d;font-size:.7rem}
+.section-title{font-size:1.03rem;font-weight:850;color:#edf6ff;margin:.55rem 0 .7rem}
+.insight{padding:13px 15px;border-radius:12px;background:#0c1827;border:1px solid #1c344b;margin-bottom:8px}.insight b{color:#f5f9fd}.muted{color:#8ea4b8;font-size:.81rem}
+[data-testid="stMetric"]{background:#0e1a29;border:1px solid #1d344b;border-radius:13px;padding:11px 14px}
+.stTabs [data-baseweb="tab-list"]{gap:4px;border-bottom:1px solid #1c344b}.stTabs [data-baseweb="tab"]{padding:9px 14px;font-weight:750}.stTabs [aria-selected="true"]{color:#67e8f9}
+[data-testid="stFileUploader"]{width:100%}.stButton button{border-radius:9px}
+</style></style>
 """, unsafe_allow_html=True)
 
 @st.cache_data(ttl=3600)
@@ -131,9 +131,10 @@ risk,anomalies,segments,importance=get_ai_bundle(f,horizon)
 
 st.markdown("""
 <div class="hero">
-<div class="eyebrow">Retail Decision Intelligence • Capstone 2026</div>
-<h1>📦 Retail Intelligence Command Center</h1>
-<p>AI-powered sales, inventory, demand forecasting and operational decision support.</p>
+<div class="eyebrow">Retail Pulse AI • Capstone 2026</div>
+<h1>📈 Retail Pulse</h1>
+<p>One decision workspace for revenue signals, inventory exposure, demand forecasts and AI-assisted actions.</p>
+<span class="hero-chip">LIVE DATA • PREDICTIVE ANALYTICS • ACTION INTELLIGENCE</span>
 </div>
 """,unsafe_allow_html=True)
 
@@ -188,7 +189,7 @@ with tabs[0]:
         st.markdown(f'<div class="insight"><b>{icon} {title}</b><br><span class="muted">{msg}</span></div>',unsafe_allow_html=True)
 
 with tabs[1]:
-    st.markdown('<div class="section-title">🤖 AI Insights</div>',unsafe_allow_html=True)
+    st.markdown('<div class="section-title">🧠 Intelligence Layer</div>',unsafe_allow_html=True)
     st.caption("Machine-learning layer for risk, anomalies, segmentation, predictive drivers and business scenarios.")
     st.markdown(f'<div class="insight"><b>🧠 AI Executive Copilot</b><br><span class="muted">{copilot_summary(f,risk,anomalies,segments)}</span></div>',unsafe_allow_html=True)
     a,b,c=st.columns(3)
@@ -233,7 +234,7 @@ with tabs[1]:
         st.plotly_chart(fig,use_container_width=True)
 
 with tabs[2]:
-    st.markdown('<div class="section-title">📦 Inventory Plan</div>',unsafe_allow_html=True)
+    st.markdown('<div class="section-title">📦 Inventory Control</div>',unsafe_allow_html=True)
     a,b,c,d=st.columns(4)
     a.metric("Critical",critical)
     b.metric("Replenish",replenish)
@@ -257,7 +258,7 @@ with tabs[2]:
     st.download_button("⬇️ Export inventory decision queue",alerts.to_csv(index=False),"retail_inventory_actions.csv","text/csv")
 
 with tabs[3]:
-    st.markdown('<div class="section-title">🔮 Demand Forecast</div>',unsafe_allow_html=True)
+    st.markdown('<div class="section-title">🔮 Demand Outlook</div>',unsafe_allow_html=True)
     if len(f)>100:
         _,metrics,preds=chronological_model(f)
         a,b,c=st.columns(3)
@@ -279,7 +280,7 @@ with tabs[3]:
         st.warning("Select a larger data window for model evaluation.")
 
 with tabs[4]:
-    st.markdown('<div class="section-title">🧾 Transactions & Decision Queue</div>',unsafe_allow_html=True)
+    st.markdown('<div class="section-title">🧾 Data Explorer</div>',unsafe_allow_html=True)
     st.caption("Search the underlying retail observations and download operational actions.")
     search=st.text_input("Search Store / Product / Category",placeholder="e.g. S001 or P0001")
     view=f.copy()
@@ -294,4 +295,4 @@ with tabs[4]:
     st.download_button("⬇️ Download complete action queue",alerts.to_csv(index=False),"retail_action_queue.csv","text/csv")
 
 st.divider()
-st.markdown('<div style="text-align:center;color:#697180;font-size:.75rem">Retail Store Sales & Inventory Performance Analytics • Capstone 2026 • Pradyuman Verma • SRMIST</div>',unsafe_allow_html=True)
+st.markdown('<div style="text-align:center;color:#697180;font-size:.75rem">Retail Pulse AI • Sales, Inventory & Demand Intelligence • Capstone 2026</div>',unsafe_allow_html=True)
