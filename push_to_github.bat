@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set REPO_URL=https://github.com/Pradyumanv68/Retail-Store-Sales-Inventory-Performance-Analytics.git
+set REPO_URL=https://github.com/Pradyumanv68/retail-store-inventory-analytics-final.git
 cd /d "%~dp0"
 where git >nul 2>nul
 if errorlevel 1 (
@@ -26,5 +26,5 @@ if errorlevel 1 (
   exit /b 1
 )
 echo.
-echo SUCCESS! Open https://github.com/Pradyumanv68/Retail-Store-Sales-Inventory-Performance-Analytics
+echo SUCCESS! Open https://github.com/Pradyumanv68/retail-store-inventory-analytics-final
 pause
