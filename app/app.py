@@ -64,7 +64,7 @@ df, source = get_default_df()
 with st.sidebar:
     st.markdown("## 📁 Data")
     st.caption("Use the project dataset or upload your own retail CSV.")
-    uploaded=st.file_uploader("Upload retail CSV",type=["csv"])
+    uploaded=st.file_uploader("Choose CSV file",type=["csv"],label_visibility="collapsed")
     if uploaded is not None:
         try:
             raw=pd.read_csv(uploaded)
@@ -101,6 +101,7 @@ with st.sidebar:
             st.error(f"Could not read CSV: {e}")
     st.divider()
     st.markdown("### 🎛️ Filters")
+    st.caption("Filter the command center by store and category.")
     stores=sorted(df["Store ID"].astype(str).unique()); cats=sorted(df["Category"].astype(str).unique())
     ss=st.multiselect("Store coverage",stores,stores)
     cc=st.multiselect("Product categories",cats,cats)
