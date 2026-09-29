@@ -62,43 +62,11 @@ def get_default_df():
 df, source = get_default_df()
 
 with st.sidebar:
-    st.markdown("## 📁 Data")
-    st.caption("Upload a retail CSV to analyze your own data.")
-    uploaded=st.file_uploader("Upload retail CSV",type=["csv"],help="CSV files up to 200 MB")
-    if uploaded is not None:
-        try:
-            raw=pd.read_csv(uploaded)
-            st.success(f"Loaded {len(raw):,} rows")
-            st.markdown("### Column mapping")
-            cols=list(raw.columns)
-            def pick(label,preferred):
-                opts=["— Not mapped —"]+cols
-                idx=opts.index(preferred) if preferred in opts else 0
-                return st.selectbox(label,opts,index=idx,key="map_"+label)
-            date_col=pick("Date","Date"); store_col=pick("Store","Store ID"); product_col=pick("Product","Product ID")
-            category_col=pick("Category","Category"); demand_col=pick("Demand","Demand"); sold_col=pick("Units Sold","Units Sold")
-            inv_col=pick("Inventory","Inventory Level"); price_col=pick("Price","Price")
-            mapping={date_col:"Date",store_col:"Store ID",product_col:"Product ID",category_col:"Category",
-                     demand_col:"Demand",sold_col:"Units Sold",inv_col:"Inventory Level",price_col:"Price"}
-            if "— Not mapped —" not in mapping:
-                mapped=raw.rename(columns=mapping).copy()
-                required=["Date","Store ID","Product ID","Category","Demand","Units Sold","Inventory Level","Price"]
-                missing=[x for x in required if x not in mapped.columns]
-                if not missing:
-                    if "Units Ordered" not in mapped: mapped["Units Ordered"]=0
-                    if "Discount" not in mapped: mapped["Discount"]=0
-                    if "Promotion" not in mapped: mapped["Promotion"]=0
-                    if "Competitor Pricing" not in mapped: mapped["Competitor Pricing"]=mapped["Price"]
-                    if "Region" not in mapped: mapped["Region"]="Unknown"
-                    if "Weather Condition" not in mapped: mapped["Weather Condition"]="Unknown"
-                    if "Seasonality" not in mapped: mapped["Seasonality"]="Unknown"
-                    if "Epidemic" not in mapped: mapped["Epidemic"]=0
-                    df=_clean(mapped)
-                    source="Uploaded CSV"
-                else:
-                    st.warning("Missing required columns: "+", ".join(missing))
-        except Exception as e:
-            st.error(f"Could not read CSV: {e}")
+    st.markdown("## 📊 Workspace")
+    st.markdown(
+        '<div class="panel"><b>Retail dataset</b><br><span class="muted">Use the default 76K dataset or import your own CSV from Data Explorer.</span></div>',
+        unsafe_allow_html=True
+    )
     st.divider()
     st.markdown("### 🎛️ Filters")
     st.caption("Filter the command center by store and category.")
@@ -281,6 +249,18 @@ with tabs[3]:
 
 with tabs[4]:
     st.markdown('<div class="section-title">🧾 Data Explorer</div>',unsafe_allow_html=True)
+    up_col, info_col = st.columns([1,2])
+    with up_col:
+        st.markdown("**Import your own retail CSV**")
+        uploaded=st.file_uploader("Choose CSV",type=["csv"],label_visibility="collapsed",help="Upload a CSV up to 200 MB")
+    with info_col:
+        st.markdown(
+            '<div class="insight"><b>📥 Custom dataset workspace</b><br><span class="muted">Upload a compatible retail CSV here. The dashboard will use the imported data for exploration and downloads.</span></div>',
+            unsafe_allow_html=True
+        )
+    if uploaded is not None:
+        st.success(f"Uploaded: {uploaded.name} • {uploaded.size/1024/1024:.1f} MB")
+    
     st.caption("Search the underlying retail observations and download operational actions.")
     search=st.text_input("Search Store / Product / Category",placeholder="e.g. S001 or P0001")
     view=f.copy()
